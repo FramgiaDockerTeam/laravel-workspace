@@ -87,6 +87,9 @@ RUN curl -O http://ftp.ruby-lang.org/pub/ruby/stable-snapshot.tar.gz \
     && make install \
     && gem install sass
 
+# Install yarn
+RUN npm install -g yarn
+
 # Clean up
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 

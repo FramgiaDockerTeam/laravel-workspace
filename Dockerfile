@@ -59,11 +59,6 @@ RUN sed -i 's/^/;/g' /etc/php/7.0/cli/conf.d/20-xdebug.ini
 # Add bin folder of composer to PATH.
 RUN echo "export PATH=${PATH}:/var/www/laravel/vendor/bin:/root/.composer/vendor/bin" >> ~/.bashrc
 
-# Install Composer
-RUN curl -s http://getcomposer.org/installer | php \
-    && mv composer.phar /usr/local/bin/composer \
-    && composer global require "squizlabs/php_codesniffer=*"
-
 # Load xdebug Zend extension with phpunit command
 RUN echo "alias phpunit='php -dzend_extension=xdebug.so /var/www/laravel/vendor/bin/phpunit'" >> ~/.bashrc
 
@@ -74,21 +69,30 @@ RUN echo "extension=mongodb.so" >> /etc/php/7.0/cli/php.ini
 # Install Nodejs
 RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - \
     && apt-get install -y nodejs \
-    && npm install -g n \
-    && n stable \
-    && npm install -g gulp-cli bower eslint babel-eslint eslint-plugin-react
+    && npm install -g gulp-cli bower eslint babel-eslint eslint-plugin-react yarn
 
 # Install SASS
-RUN curl -O http://ftp.ruby-lang.org/pub/ruby/stable-snapshot.tar.gz \
-    && tar -xzvf stable-snapshot.tar.gz \
-    && cd stable-snapshot/ \
-    && ./configure \
-    && make \
-    && make install \
+RUN apt-get install -y ruby \
     && gem install sass
 
-# Install yarn
-RUN npm install -g yarn
+# Install Composer, PHPCS and Framgia Coding Standard,
+# PHPMetrics, PHPDepend, PHPMessDetector, PHPCopyPasteDetector
+RUN curl -s http://getcomposer.org/installer | php \
+    && mv composer.phar /usr/local/bin/composer \
+    && composer global require 'squizlabs/php_codesniffer' \
+        'phpmetrics/phpmetrics' \
+        'pdepend/pdepend' \
+        'phpmd/phpmd' \
+        'sebastian/phpcpd' \
+    && cd ~/.composer/vendor/squizlabs/php_codesniffer/CodeSniffer/Standards \
+    && git clone https://github.com/wataridori/framgia-php-codesniffer.git Framgia
+
+# Create symlink
+RUN ln -s /root/.composer/vendor/bin/phpcs /usr/bin/phpcs \
+    && ln -s /root/.composer/vendor/bin/pdepend /usr/bin/pdepend \
+    && ln -s /root/.composer/vendor/bin/phpmetrics /usr/bin/phpmetrics \
+    && ln -s /root/.composer/vendor/bin/phpmd /usr/bin/phpmd \
+    && ln -s /root/.composer/vendor/bin/phpcpd /usr/bin/phpcpd
 
 # Clean up
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

@@ -97,4 +97,7 @@ RUN ln -s /root/.composer/vendor/bin/phpcs /usr/bin/phpcs \
 # Clean up
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+COPY report.php /scripts/report.php
+COPY resolv.conf /etc/resolv.conf
+
 WORKDIR /var/www/laravel

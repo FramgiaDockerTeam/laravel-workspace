@@ -67,7 +67,7 @@ RUN pecl install mongodb
 RUN echo "extension=mongodb.so" >> /etc/php/7.0/cli/php.ini
 
 # Install Nodejs
-RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - \
+RUN curl -sL https://deb.nodesource.com/setup_7.x | bash - \
     && apt-get install -y nodejs \
     && npm install -g gulp-cli bower eslint babel-eslint eslint-plugin-react yarn
 

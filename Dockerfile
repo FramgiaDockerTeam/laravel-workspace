@@ -21,22 +21,22 @@ RUN add-apt-repository -y \
 
 # Install PHP-CLI 7, some PHP extentions and some useful Tools with APT
 RUN apt-get update && apt-get install -y --force-yes \
-        php7.0-cli \
-        php7.0-common \
-        php7.0-curl \
-        php7.0-json \
-        php7.0-xml \
-        php7.0-mbstring \
-        php7.0-mcrypt \
-        php7.0-mysql \
-        php7.0-pgsql \
-        php7.0-sqlite \
-        php7.0-sqlite3 \
-        php7.0-zip \
-        php7.0-memcached \
-        php7.0-gd \
-        php7.0-fpm \
-        php7.0-xdebug \
+        php7.1-cli \
+        php7.1-common \
+        php7.1-curl \
+        php7.1-json \
+        php7.1-xml \
+        php7.1-mbstring \
+        php7.1-mcrypt \
+        php7.1-mysql \
+        php7.1-pgsql \
+        php7.1-sqlite \
+        php7.1-sqlite3 \
+        php7.1-zip \
+        php7.1-memcached \
+        php7.1-gd \
+        php7.1-fpm \
+        php7.1-xdebug \
         php-dev \
         libcurl4-openssl-dev \
         libedit-dev \
@@ -54,7 +54,7 @@ RUN apt-get update && apt-get install -y --force-yes \
         iputils-ping
 
 # remove load xdebug extension (only load on phpunit command)
-RUN sed -i 's/^/;/g' /etc/php/7.0/cli/conf.d/20-xdebug.ini
+RUN sed -i 's/^/;/g' /etc/php/7.1/cli/conf.d/20-xdebug.ini
 
 # Add bin folder of composer to PATH.
 RUN echo "export PATH=${PATH}:/var/www/laravel/vendor/bin:/root/.composer/vendor/bin" >> ~/.bashrc
@@ -63,8 +63,8 @@ RUN echo "export PATH=${PATH}:/var/www/laravel/vendor/bin:/root/.composer/vendor
 RUN echo "alias phpunit='php -dzend_extension=xdebug.so /var/www/laravel/vendor/bin/phpunit'" >> ~/.bashrc
 
 # Install mongodb extension
-# RUN pecl channel-update pecl.php.net && pecl install mongodb-1.1.9
-# RUN echo "extension=mongodb.so" >> /etc/php/7.0/cli/php.ini
+RUN pecl channel-update pecl.php.net && pecl install mongodb-1.1.9
+RUN echo "extension=mongodb.so" >> /etc/php/7.1/cli/php.ini
 
 # Install Nodejs
 RUN curl -sL https://deb.nodesource.com/setup_7.x | bash - \
@@ -95,7 +95,7 @@ RUN ln -s /root/.composer/vendor/bin/phpcs /usr/bin/phpcs \
     && ln -s /root/.composer/vendor/bin/phpcpd /usr/bin/phpcpd
 
 # Install framgia-ci-tool
-curl -o /usr/bin/framgia-ci https://raw.githubusercontent.com/framgia/ci-report-tool/master/dist/framgia-ci \
+RUN curl -o /usr/bin/framgia-ci https://raw.githubusercontent.com/framgia/ci-report-tool/master/dist/framgia-ci \
     && chmod +x /usr/bin/framgia-ci
 
 # Clean up

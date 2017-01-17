@@ -75,6 +75,10 @@ RUN curl -sL https://deb.nodesource.com/setup_7.x | bash - \
 RUN apt-get install -y ruby \
     && gem install sass
 
+# Install Compass
+RUN apt-get install -y ruby-dev
+RUN gem install --no-rdoc --no-ri compass
+
 # Install Composer, PHPCS and Framgia Coding Standard,
 # PHPMetrics, PHPDepend, PHPMessDetector, PHPCopyPasteDetector
 RUN curl -s http://getcomposer.org/installer | php \

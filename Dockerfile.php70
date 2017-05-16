@@ -3,6 +3,11 @@ FROM ubuntu:16.04
 MAINTAINER Tran Duc Thang <thangtd90@gmail.com>
 
 RUN DEBIAN_FRONTEND=noninteractive
+
+# Install "software-properties-common" (for the "add-apt-repository")
+RUN apt-get update && apt-get install -y \
+    software-properties-common locales
+
 RUN locale-gen en_US.UTF-8
 
 ENV LANGUAGE=en_US.UTF-8
@@ -10,10 +15,6 @@ ENV LC_ALL=en_US.UTF-8
 ENV LC_CTYPE=UTF-8
 ENV LANG=en_US.UTF-8
 ENV TERM xterm
-
-# Install "software-properties-common" (for the "add-apt-repository")
-RUN apt-get update && apt-get install -y \
-    software-properties-common
 
 # Add the "PHP 7" ppa
 RUN add-apt-repository -y \
@@ -77,12 +78,12 @@ RUN apt-get install -y ruby \
 # PHPMetrics, PHPDepend, PHPMessDetector, PHPCopyPasteDetector
 RUN curl -s http://getcomposer.org/installer | php \
     && mv composer.phar /usr/local/bin/composer \
-    && composer global require 'squizlabs/php_codesniffer' \
+    && composer global require 'squizlabs/php_codesniffer=2.9' \
         'phpmetrics/phpmetrics' \
         'pdepend/pdepend' \
         'phpmd/phpmd' \
         'sebastian/phpcpd' \
-    && cd ~/.composer/vendor/squizlabs/php_codesniffer/CodeSniffer/Standards \
+    && cd ~/.composer/vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/ \
     && git clone https://github.com/wataridori/framgia-php-codesniffer.git Framgia
 
 # Create symlink

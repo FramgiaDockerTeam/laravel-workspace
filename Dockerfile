@@ -37,6 +37,7 @@ RUN apt-get update && apt-get install -y --force-yes \
         php7.1-gd \
         php7.1-fpm \
         php7.1-xdebug \
+        php7.1-bz2 \
         php7.1-bcmath \
         php7.1-intl \
         php7.1-dev \
@@ -66,7 +67,7 @@ RUN echo "alias phpunit='php -dzend_extension=xdebug.so /var/www/laravel/vendor/
 
 # Install mongodb extension
 RUN pecl channel-update pecl.php.net && pecl install mongodb-1.1.9
-RUN echo "extension=mongodb.so" >> /etc/php/7.1/cli/php.ini
+RUN echo "extension=mongodb.so" >> /etc/php/7.1/cli/conf.d/20-mongodb.ini
 
 # Install Nodejs
 RUN curl -sL https://deb.nodesource.com/setup_7.x | bash - \
@@ -76,6 +77,10 @@ RUN curl -sL https://deb.nodesource.com/setup_7.x | bash - \
 # Install SASS
 RUN apt-get install -y ruby \
     && gem install sass
+
+# Install Compass
+RUN apt-get install -y ruby-dev
+RUN gem install --no-rdoc --no-ri compass
 
 # Install Composer, PHPCS and Framgia Coding Standard,
 # PHPMetrics, PHPDepend, PHPMessDetector, PHPCopyPasteDetector

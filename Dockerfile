@@ -64,7 +64,7 @@ RUN echo "alias phpunit='php -dzend_extension=xdebug.so /var/www/laravel/vendor/
 
 # Install mongodb extension
 RUN pecl channel-update pecl.php.net && pecl install mongodb-1.1.9
-RUN echo "extension=mongodb.so" >> /etc/php/7.1/cli/php.ini
+RUN echo "extension=mongodb.so" >> /etc/php/7.1/cli/conf.d/20-mongodb.ini
 
 # Install Nodejs
 RUN curl -sL https://deb.nodesource.com/setup_7.x | bash - \

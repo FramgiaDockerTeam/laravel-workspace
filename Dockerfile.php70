@@ -75,7 +75,7 @@ RUN curl -sL https://deb.nodesource.com/setup_7.x | bash - \
     && npm install -g gulp-cli bower eslint babel-eslint eslint-plugin-react yarn
 
 # Install SASS
-RUN apt-get install -y ruby \
+RUN apt-get install -y ruby ruby-dev \
     && gem install sass
 
 # Install Composer, PHPCS and Framgia Coding Standard,

@@ -65,7 +65,7 @@ RUN echo "export PATH=${PATH}:/var/www/laravel/vendor/bin:/root/.composer/vendor
 RUN echo "alias phpunit='php -dzend_extension=xdebug.so /var/www/laravel/vendor/bin/phpunit'" >> ~/.bashrc
 
 # Install mongodb extension
-RUN pecl channel-update pecl.php.net && pecl install mongodb-1.1.9
+RUN pecl channel-update pecl.php.net && pecl install mongodb
 RUN echo "extension=mongodb.so" >> /etc/php/7.1/cli/php.ini
 
 # Install Nodejs
@@ -99,8 +99,6 @@ RUN ln -s /root/.composer/vendor/bin/phpcs /usr/bin/phpcs \
 # Install framgia-ci-tool
 RUN curl -o /usr/bin/framgia-ci https://raw.githubusercontent.com/framgia/ci-report-tool/master/dist/framgia-ci \
     && chmod +x /usr/bin/framgia-ci
-
-RUN pecl install mongodb
 
 # Clean up
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

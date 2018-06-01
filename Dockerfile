@@ -69,7 +69,7 @@ RUN pecl channel-update pecl.php.net && pecl install mongodb
 RUN echo "extension=mongodb.so" >> /etc/php/7.1/cli/php.ini
 
 # Install Nodejs
-RUN curl -sL https://deb.nodesource.com/setup_7.x | bash - \
+RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - \
     && apt-get install -y nodejs \
     && npm install -g gulp-cli bower eslint babel-eslint eslint-plugin-react yarn
 
@@ -81,20 +81,21 @@ RUN apt-get install -y ruby ruby-dev \
 # PHPMetrics, PHPDepend, PHPMessDetector, PHPCopyPasteDetector
 RUN curl -s http://getcomposer.org/installer | php \
     && mv composer.phar /usr/local/bin/composer \
-    && composer global require 'squizlabs/php_codesniffer=2.9' \
+    && composer global require 'squizlabs/php_codesniffer=*' \
         'phpmetrics/phpmetrics' \
         'pdepend/pdepend' \
         'phpmd/phpmd' \
-        'sebastian/phpcpd' \
-    && cd ~/.composer/vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/ \
-    && git clone https://github.com/wataridori/framgia-php-codesniffer.git Framgia
-
+        'sebastian/phpcpd'
 # Create symlink
 RUN ln -s /root/.composer/vendor/bin/phpcs /usr/bin/phpcs \
     && ln -s /root/.composer/vendor/bin/pdepend /usr/bin/pdepend \
     && ln -s /root/.composer/vendor/bin/phpmetrics /usr/bin/phpmetrics \
     && ln -s /root/.composer/vendor/bin/phpmd /usr/bin/phpmd \
     && ln -s /root/.composer/vendor/bin/phpcpd /usr/bin/phpcpd
+# install phpcs Framgia standards
+RUN cd ~ \
+    && cd ~/.composer/vendor/squizlabs/php_codesniffer/src/Standards/ \
+    && git clone https://github.com/wataridori/framgia-php-codesniffer.git Framgia
 
 # Install framgia-ci-tool
 RUN curl -o /usr/bin/framgia-ci https://raw.githubusercontent.com/framgia/ci-report-tool/master/dist/framgia-ci \
